@@ -1,13 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const passport = require("passport");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:4001",
+  origin: "http://localhost:3000",
 };
 
 app.use(cors(corsOptions));
@@ -24,10 +23,6 @@ mongoose
   .connect(mongouri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Successfully connect to MongoDB."))
   .catch((err) => console.log(err));
-
-// passport middleware
-app.use(passport.initialize());
-require("./config/passport")(passport);
 
 // routes
 app.get("/", (req, res) => {

@@ -11,7 +11,8 @@ exports.signup = (req, res) => {
   // validate form
   const { errors, isValid } = validMW.signup(req.body);
   if (!isValid) {
-    return res.status(400).json(errors);
+    errors.err = 1;
+    return res.status(200).json(errors);
   }
 
   // check duplicate
@@ -33,7 +34,8 @@ exports.signup = (req, res) => {
       if (user.username === req.body.username) {
         errors.username = "Username already exists";
       }
-      return res.status(400).json(errors);
+      errors.err = 1;
+      return res.status(200).json(errors);
     } else {
       const newUser = new User({
         username: req.body.username,
@@ -58,14 +60,19 @@ exports.login = (req, res) => {
   // validate form
   const { errors, isValid } = validMW.login(req.body);
   if (!isValid) {
-    return res.status(400).json(errors);
+    errors.err = 1;
+    return res.status(200).json(errors);
   }
 
+  // auth
   User.findOne({
     email: req.body.email,
   }).then((user) => {
     if (!user) {
-      return res.status(404).send({ emailerr: "Email Not found." });
+      return res.status(200).json({
+        err: 1,
+        email: "Email Not found.",
+      });
     }
 
     bcrypt.compare(req.body.password, user.password).then((isMatch) => {
@@ -93,8 +100,9 @@ exports.login = (req, res) => {
           }
         );
       } else {
-        return res.status(401).json({
-          pwderr: "Password incorrect",
+        return res.status(200).json({
+          err: 1,
+          password: "Password incorrect",
         });
       }
     });
