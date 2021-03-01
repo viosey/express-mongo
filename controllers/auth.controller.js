@@ -1,10 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+// const Cookies = require("cookies");
 const config = require("../config/config");
-
-// load input validation middleware
 const validMW = require("../middlewares/valid.mw");
-
 const User = require("../models/user.model");
 
 exports.signup = (req, res) => {
@@ -57,6 +55,7 @@ exports.signup = (req, res) => {
 };
 
 exports.login = (req, res) => {
+  //   const cookies = new Cookies(req, res);
   // validate form
   const { errors, isValid } = validMW.login(req.body);
   if (!isValid) {
@@ -88,9 +87,10 @@ exports.login = (req, res) => {
           payload,
           config.SECRET,
           {
-            expiresIn: 86400, // 24h
+            expiresIn: 12 * 60 * 60, // 12h
           },
           (err, token) => {
+            // cookies.set("acces_token", "Bearer " + token, { httpOnly: true });
             res.status(200).json({
               id: user._id,
               email: user.email,
