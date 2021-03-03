@@ -19,7 +19,7 @@ exports.verifyToken = (req, res, next) => {
       // verify jwt
       jwt.verify(tokenArr[1], config.SECRET, (err, decoded) => {
         if (err) {
-          return res.status(200).json({ success: false });
+          return res.status(200).json({ success: false});
         } else {
           req.userId = decoded.id;
           return res.status(200).json({ success: true, msg: decoded.id });
