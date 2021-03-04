@@ -1,3 +1,4 @@
+RESTful API with JWT Authentication
 ```
 post
 http://localhost:4000/api/auth/login
